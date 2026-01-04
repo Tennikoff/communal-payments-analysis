@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Выход - КоммуналПро{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="mb-4">👋 Вы вышли из аккаунта</h2>
+                    <p class="text-muted mb-4">Спасибо, что пользуетесь нашим сервисом!</p>
+                    <a href="{% url 'home' %}" class="btn btn-primary me-2">На главную</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary">Войти снова</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
