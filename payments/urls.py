@@ -19,4 +19,7 @@ urlpatterns = [
     path('payments/add/', views.payment_create, name='payment_create'),
     path('payments/<int:pk>/edit/', views.payment_edit, name='payment_edit'),
     path('payments/<int:pk>/delete/', views.payment_delete, name='payment_delete'),
+
+    # Аналитика
+    path('analytics/', views.analytics, name='analytics'),
 ]

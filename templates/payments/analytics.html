@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Аналитика - КоммуналПро{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">📊 Аналитика расходов</h1>
+
+    <!-- Статистика -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ total_spent }} ₽</h3>
+                    <p class="text-muted mb-0">Всего потрачено</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-success">{{ avg_monthly }} ₽</h3>
+                    <p class="text-muted mb-0">Средний платёж/месяц</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-warning">{{ overpayments_count }}</h3>
+                    <p class="text-muted mb-0">Переплат выявлено</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-info">{{ forecast }} ₽</h3>
+                    <p class="text-muted mb-0">Прогноз на месяц</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Графики -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Динамика расходов</h5>
+                    <img src="data:image/png;base64,{{ chart1 }}" class="img-fluid" alt="График расходов">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Структура платежей</h5>
+                    <img src="data:image/png;base64,{{ chart2 }}" class="img-fluid" alt="Круговая диаграмма">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сравнение с нормативами -->
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title mb-3">📈 Сравнение с нормативами</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Услуга</th>
+                            <th>Среднее потребление</th>
+                            <th>Норматив</th>
+                            <th>Отклонение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in services_stats %}
+                        <tr>
+                            <td>{{ stat.name }}</td>
+                            <td>{{ stat.avg }}</td>
+                            <td>{{ stat.norm }}</td>
+                            <td>
+                                {% if stat.diff > 10 %}
+                                <span class="badge bg-danger">+{{ stat.diff }}%</span>
+                                {% elif stat.diff > 0 %}
+                                <span class="badge bg-warning text-dark">+{{ stat.diff }}%</span>
+                                {% else %}
+                                <span class="badge bg-success">{{ stat.diff }}%</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
