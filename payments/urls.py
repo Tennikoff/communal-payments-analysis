@@ -7,4 +7,10 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    
+    # Квартиры
+    path('apartments/', views.apartment_list, name='apartment_list'),
+    path('apartments/add/', views.apartment_create, name='apartment_create'),
+    path('apartments/<int:pk>/edit/', views.apartment_edit, name='apartment_edit'),
+    path('apartments/<int:pk>/delete/', views.apartment_delete, name='apartment_delete'),
 ]

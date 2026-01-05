@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои квартиры - КоммуналПро{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>🏠 Мои квартиры</h1>
+        <a href="{% url 'apartment_create' %}" class="btn btn-success">+ Добавить квартиру</a>
+    </div>
+
+    {% if apartments %}
+    <div class="row">
+        {% for apartment in apartments %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ apartment.address }}</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li>📐 Площадь: {{ apartment.area }} м²</li>
+                        <li>👥 Проживающих: {{ apartment.residents_count }}</li>
+                        <li>📅 Добавлена: {{ apartment.created_at|date:"d.m.Y" }}</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{% url 'apartment_edit' apartment.pk %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
+                    <a href="{% url 'apartment_delete' apartment.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <h5>У вас пока нет добавленных квартир</h5>
+        <p>Добавьте свою первую квартиру, чтобы начать учёт коммунальных платежей.</p>
+        <a href="{% url 'apartment_create' %}" class="btn btn-primary">Добавить квартиру</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

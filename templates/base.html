@@ -45,7 +45,7 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Мои квартиры</a>
+                        <a class="nav-link" href="{% url 'apartment_list' %}">Мои квартиры</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Платежи</a>
