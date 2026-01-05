@@ -13,4 +13,10 @@ urlpatterns = [
     path('apartments/add/', views.apartment_create, name='apartment_create'),
     path('apartments/<int:pk>/edit/', views.apartment_edit, name='apartment_edit'),
     path('apartments/<int:pk>/delete/', views.apartment_delete, name='apartment_delete'),
+    
+    # Платежи
+    path('payments/', views.payment_list, name='payment_list'),
+    path('payments/add/', views.payment_create, name='payment_create'),
+    path('payments/<int:pk>/edit/', views.payment_edit, name='payment_edit'),
+    path('payments/<int:pk>/delete/', views.payment_delete, name='payment_delete'),
 ]

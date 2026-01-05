@@ -27,3 +27,27 @@ class ApartmentForm(forms.ModelForm):
             'area': 'Площадь (м²)',
             'residents_count': 'Количество проживающих',
         }
+
+class PaymentRecordForm(forms.ModelForm):
+    class Meta:
+        model = PaymentRecord
+        fields = ['apartment', 'service_type', 'date', 'consumption', 'tariff']
+        widgets = {
+            'apartment': forms.Select(attrs={'class': 'form-select'}),
+            'service_type': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'consumption': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'Потребление'}),
+            'tariff': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'Тариф за единицу'}),
+        }
+        labels = {
+            'apartment': 'Квартира',
+            'service_type': 'Тип услуги',
+            'date': 'Дата платежа',
+            'consumption': 'Потребление',
+            'tariff': 'Тариф (руб/ед)',
+        }
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Показываем только квартиры текущего пользователя
+        self.fields['apartment'].queryset = Apartment.objects.filter(user=user)

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление платежа - КоммуналПро{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-danger">
+                <div class="card-body p-4 text-center">
+                    <h2 class="text-danger mb-4">⚠️ Удаление платежа</h2>
+                    <p class="lead">Вы уверены, что хотите удалить платёж?</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Дата:</strong> {{ payment.date|date:"d.m.Y" }}</li>
+                        <li><strong>Услуга:</strong> {{ payment.service_type.name }}</li>
+                        <li><strong>Сумма:</strong> {{ payment.total_amount }} руб.</li>
+                    </ul>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="submit" class="btn btn-danger">Да, удалить</button>
+                            <a href="{% url 'payment_list' %}" class="btn btn-secondary">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
