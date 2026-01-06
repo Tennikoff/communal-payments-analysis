@@ -2,7 +2,7 @@
 
 Веб-сервис для жильцов многоквартирных домов, позволяющий отслеживать коммунальные платежи, выявлять переплаты и прогнозировать расходы.
 
-**Демо-версия:** [https://ваш-логин.pythonanywhere.com](https://ваш-логин.pythonanywhere.com)
+**Демо-версия:** [https://Tennikoff.pythonanywhere.com](https://Tennikoff.pythonanywhere.com)
 
 ---
 
@@ -42,32 +42,35 @@
 
 ## 🚀 Как запустить проект локально
 
-### 1. Клонируйте репозиторий
 ```bash
-git clone https://github.com/ваш-username/communal-payments-analysis.git
+**1. Клонируйте репозиторий**
+git clone https://github.com/Tennikoff/communal-payments-analysis.git
 cd communal-payments-analysis
 
-    2. Создайте виртуальное окружение
+**2. Создайте виртуальное окружение**
 python -m venv venv
 venv\Scripts\activate  # Windows
 source venv/bin/activate  # Linux/Mac
     
-    3. Установите зависимости
+**3. Установите зависимости**
 pip install -r requirements.txt
     
-    4. Выполните миграции
+**4. Выполните миграции**
 python manage.py migrate
     
-    5. Создайте суперпользователя
+**5. Создайте суперпользователя**
 python manage.py createsuperuser
     
-    6. Запустите сервер
+**6. Запустите сервер**
 python manage.py runserver
     
-    7. Откройте в браузере
+**7. Откройте в браузере**
 http://127.0.0.1:8000/
-    
-    📁 Структура проекта
+```
+
+---
+
+### 📁 Структура проекта
 
 communal-payments-analysis/
 ├── config/              # Настройки Django
@@ -80,6 +83,8 @@ communal-payments-analysis/
 ├── requirements.txt     # Зависимости
 ├── TZ.md               # Техническое задание
 └── README.md           # Документация
+
+---
 
 👤 Автор
 Имя: [Егор]
