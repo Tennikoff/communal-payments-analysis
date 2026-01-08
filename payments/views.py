@@ -20,14 +20,22 @@ def home(request):
     
     # Общая сумма всех платежей
     total_sum = PaymentRecord.objects.aggregate(Sum('total_amount'))['total_amount__sum']
-    stats['total_sum'] = round(float(total_sum), 2) if total_sum else 0
+    total_sum_value = float(total_sum) if total_sum else 0
+    
+    # Форматирование суммы (округление до целого)
+    if total_sum_value >= 1000:
+        stats['total_sum_display'] = f"{int(total_sum_value / 1000)}тыс ₽"
+    else:
+        stats['total_sum_display'] = f"{int(total_sum_value)} ₽"
+    
+    stats['total_sum'] = int(total_sum_value)
     
     # Количество выявленных переплат
     stats['overpayments_count'] = PaymentRecord.objects.filter(is_overpayment=True).count()
     
-    # Средний платёж
+    # Средний платёж (округляем до целого)
     avg_payment = PaymentRecord.objects.aggregate(Avg('total_amount'))['total_amount__avg']
-    stats['avg_payment'] = round(float(avg_payment), 2) if avg_payment else 0
+    stats['avg_payment'] = int(round(float(avg_payment))) if avg_payment else 0
     
     return render(request, 'home.html', {'stats': stats})
 

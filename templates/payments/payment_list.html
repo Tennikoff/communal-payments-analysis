@@ -5,133 +5,139 @@
 {% block content %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>💰 Мои платежи</h1>
+        <h1><i class="bi bi-credit-card me-2" style="color: var(--primary-color);"></i>Мои платежи</h1>
         <div>
-            <a href="{% url 'payment_export_csv' %}" class="btn btn-outline-success">📥 Экспорт CSV</a>
-            <a href="{% url 'payment_create' %}" class="btn btn-success">+ Добавить платёж</a>
+            <a href="{% url 'payment_export_csv' %}" class="btn btn-outline-success">
+                <i class="bi bi-download me-2"></i>Экспорт CSV
+            </a>
+            <a href="{% url 'payment_create' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-2"></i>Добавить платёж
+            </a>
         </div>
     </div>
 
     <!-- Статистика с агрегацией -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h4 class="text-primary">{{ payments.count }}</h4>
-                    <p class="text-muted mb-0">Всего платежей</p>
-                </div>
+    <div class="row mb-4 g-3">
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card primary w-100">
+                <div class="stat-value text-primary">{{ payments.count }}</div>
+                <div class="stat-label">Всего платежей</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h4 class="text-success">{{ total_amount }} ₽</h4>
-                    <p class="text-muted mb-0">Общая сумма</p>
-                </div>
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
+                <div class="stat-value money-value">{{ total_amount }} ₽</div>
+                <div class="stat-label">Общая сумма</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h4 class="text-info">{{ avg_payment }} ₽</h4>
-                    <p class="text-muted mb-0">Средний платёж</p>
-                </div>
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
+                <div class="stat-value money-value">{{ avg_payment }} ₽</div>
+                <div class="stat-label">Средний платёж</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h4 class="text-danger">{{ overpayments_count }}</h4>
-                    <p class="text-muted mb-0">Переплат</p>
-                </div>
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card danger w-100">
+                <div class="stat-value text-danger">{{ overpayments_count }}</div>
+                <div class="stat-label">Переплат</div>
             </div>
         </div>
     </div>
 
     <!-- Фильтры -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">Тип услуги</label>
-                    <select name="service" class="form-select" onchange="this.form.submit()">
-                        <option value="">Все услуги</option>
-                        {% for service in services %}
-                        <option value="{{ service.id }}" {% if current_service == service.id|stringformat:"s" %}selected{% endif %}>
-                            {{ service.name }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Переплата</label>
-                    <select name="overpayment" class="form-select" onchange="this.form.submit()">
-                        <option value="">Все</option>
-                        <option value="yes" {% if current_overpayment == 'yes' %}selected{% endif %}>Только переплаты</option>
-                        <option value="no" {% if current_overpayment == 'no' %}selected{% endif %}>Без переплат</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Сортировка</label>
-                    <select name="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="-date" {% if current_sort == '-date' %}selected{% endif %}>Дата (новые)</option>
-                        <option value="date" {% if current_sort == 'date' %}selected{% endif %}>Дата (старые)</option>
-                        <option value="-total_amount" {% if current_sort == '-total_amount' %}selected{% endif %}>Сумма (больше)</option>
-                        <option value="total_amount" {% if current_sort == 'total_amount' %}selected{% endif %}>Сумма (меньше)</option>
-                    </select>
-                </div>
-            </form>
-        </div>
+    <div class="filter-card animate-fade-in">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label"><i class="bi bi-funnel me-2"></i>Тип услуги</label>
+                <select name="service" class="form-select" onchange="this.form.submit()">
+                    <option value="">Все услуги</option>
+                    {% for service in services %}
+                    <option value="{{ service.id }}" {% if current_service == service.id|stringformat:"s" %}selected{% endif %}>
+                        {{ service.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label"><i class="bi bi-exclamation-triangle me-2"></i>Переплата</label>
+                <select name="overpayment" class="form-select" onchange="this.form.submit()">
+                    <option value="">Все</option>
+                    <option value="yes" {% if current_overpayment == 'yes' %}selected{% endif %}>Только переплаты</option>
+                    <option value="no" {% if current_overpayment == 'no' %}selected{% endif %}>Без переплат</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label"><i class="bi bi-sort-down me-2"></i>Сортировка</label>
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="-date" {% if current_sort == '-date' %}selected{% endif %}>Дата (новые)</option>
+                    <option value="date" {% if current_sort == 'date' %}selected{% endif %}>Дата (старые)</option>
+                    <option value="-total_amount" {% if current_sort == '-total_amount' %}selected{% endif %}>Сумма (больше)</option>
+                    <option value="total_amount" {% if current_sort == 'total_amount' %}selected{% endif %}>Сумма (меньше)</option>
+                </select>
+            </div>
+        </form>
     </div>
 
     {% if payments %}
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Дата</th>
-                    <th>Квартира</th>
-                    <th>Услуга</th>
-                    <th>Потребление</th>
-                    <th>Тариф</th>
-                    <th>Сумма</th>
-                    <th>Статус</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for payment in payments %}
-                <tr class="{% if payment.is_overpayment %}overpayment{% endif %}">
-                    <td>{{ payment.date|date:"d.m.Y" }}</td>
-                    <td>{{ payment.apartment.address|truncatechars:25 }}</td>
-                    <td>{{ payment.service_type.name }}</td>
-                    <td>{{ payment.consumption }} {{ payment.service_type.unit }}</td>
-                    <td>{{ payment.tariff }} ₽</td>
-                    <td><strong>{{ payment.total_amount }} ₽</strong></td>
-                    <td>
-                        {% if payment.is_overpayment %}
-                        <span class="badge bg-danger">⚠️ Переплата</span>
-                        {% else %}
-                        <span class="badge bg-success">✓ Норма</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'payment_edit' payment.pk %}" class="btn btn-sm btn-outline-primary">✏️</a>
-                        <a href="{% url 'payment_delete' payment.pk %}" class="btn btn-sm btn-outline-danger">🗑️</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="table-container animate-fade-in-up">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Квартира</th>
+                        <th>Услуга</th>
+                        <th>Потребление</th>
+                        <th>Тариф</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr class="{% if payment.is_overpayment %}overpayment{% endif %}">
+                        <td>{{ payment.date|date:"d.m.Y" }}</td>
+                        <td>{{ payment.apartment.address|truncatechars:25 }}</td>
+                        <td>{{ payment.service_type.name }}</td>
+                        <td>{{ payment.consumption }} {{ payment.service_type.unit }}</td>
+                        <td>{{ payment.tariff }} ₽</td>
+                        <td><strong class="money-value">{{ payment.total_amount }} ₽</strong></td>
+                        <td>
+                            {% if payment.is_overpayment %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i>Переплата
+                            </span>
+                            {% else %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>Норма
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'payment_edit' payment.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'payment_delete' payment.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% else %}
-    <div class="alert alert-info">
-        <h5>Платежей не найдено</h5>
+    <div class="alert alert-info animate-fade-in">
+        <h5><i class="bi bi-info-circle-fill me-2"></i>Платежей не найдено</h5>
         {% if current_service or current_overpayment %}
         <p>Попробуйте изменить фильтры или <a href="{% url 'payment_list' %}">сбросить их</a>.</p>
         {% else %}
         <p>Добавьте первый платёж, чтобы начать отслеживать расходы.</p>
-        <a href="{% url 'payment_create' %}" class="btn btn-primary">Добавить платёж</a>
+        <a href="{% url 'payment_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>Добавить платёж
+        </a>
         {% endif %}
     </div>
     {% endif %}

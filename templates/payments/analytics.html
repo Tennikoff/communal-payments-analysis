@@ -4,40 +4,34 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">📊 Аналитика расходов</h1>
+    <h1 class="mb-4">
+        <i class="bi bi-graph-up me-2" style="color: var(--primary-color);"></i>Аналитика расходов
+    </h1>
 
     <!-- Статистика -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-primary">{{ total_spent }} ₽</h3>
-                    <p class="text-muted mb-0">Всего потрачено</p>
-                </div>
+    <div class="row mb-4 g-3">
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
+                <div class="stat-value money-value">{{ total_spent }} ₽</div>
+                <div class="stat-label">Всего потрачено</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-success">{{ avg_monthly }} ₽</h3>
-                    <p class="text-muted mb-0">Средний платёж/месяц</p>
-                </div>
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
+                <div class="stat-value money-value">{{ avg_monthly }} ₽</div>
+                <div class="stat-label">Средний платёж/месяц</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-warning">{{ overpayments_count }}</h3>
-                    <p class="text-muted mb-0">Переплат выявлено</p>
-                </div>
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card danger w-100">
+                <div class="stat-value text-danger">{{ overpayments_count }}</div>
+                <div class="stat-label">Переплат выявлено</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-info">{{ forecast }} ₽</h3>
-                    <p class="text-muted mb-0">Прогноз на месяц</p>
-                </div>
+        <div class="col-md-3 col-6 d-flex">
+            <div class="stat-card info w-100">
+                <div class="stat-value text-info">{{ forecast }} ₽</div>
+                <div class="stat-label">Прогноз на месяц</div>
             </div>
         </div>
     </div>
@@ -45,27 +39,26 @@
     <!-- Графики -->
     <div class="row mb-4">
         <div class="col-lg-6 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title">Динамика расходов</h5>
-                    <img src="data:image/png;base64,{{ chart1 }}" class="img-fluid" alt="График расходов">
-                </div>
+            <div class="chart-container animate-fade-in-up">
+                <h5><i class="bi bi-bar-chart-line me-2"></i>Динамика расходов</h5>
+                <img src="data:image/png;base64,{{ chart1 }}" class="img-fluid" alt="График расходов">
             </div>
         </div>
         <div class="col-lg-6 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title">Структура платежей</h5>
-                    <img src="data:image/png;base64,{{ chart2 }}" class="img-fluid" alt="Круговая диаграмма">
-                </div>
+            <div class="chart-container animate-fade-in-up">
+                <h5><i class="bi bi-pie-chart me-2"></i>Структура платежей</h5>
+                <img src="data:image/png;base64,{{ chart2 }}" class="img-fluid" alt="Круговая диаграмма">
             </div>
         </div>
     </div>
 
     <!-- Сравнение с нормативами -->
-    <div class="card shadow">
+    <div class="card shadow animate-fade-in-up">
         <div class="card-body">
-            <h5 class="card-title mb-3">📈 Сравнение с нормативами</h5>
+            <h5 class="mb-3">
+                <i class="bi bi-graph-up-arrow me-2" style="color: var(--primary-color);"></i>
+                Сравнение с нормативами
+            </h5>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead class="table-light">

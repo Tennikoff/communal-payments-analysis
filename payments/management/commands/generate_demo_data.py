@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = 'Генерация демо-данных для презентации проекта'
 
     def handle(self, *args, **options):
-        self.stdout.write('🚀 Начинаем генерацию демо-данных...\n')
+        self.stdout.write('Начинаем генерацию демо-данных...\n')
 
         # 1. Создаём или получаем демо-пользователя
         demo_user, created = User.objects.get_or_create(
@@ -24,9 +24,9 @@ class Command(BaseCommand):
         if created:
             demo_user.set_password('demo123456')
             demo_user.save()
-            self.stdout.write(self.style.SUCCESS('✅ Создан пользователь: demo / demo123456'))
+            self.stdout.write(self.style.SUCCESS(' Создан пользователь: demo / demo123456'))
         else:
-            self.stdout.write('ℹ️ Пользователь demo уже существует')
+            self.stdout.write('Пользователь demo уже существует')
 
         # 2. Создаём типы услуг (если ещё нет)
         services_data = [
@@ -49,12 +49,12 @@ class Command(BaseCommand):
             )
             services.append(service)
             if created:
-                self.stdout.write(f'✅ Создана услуга: {service.name}')
+                self.stdout.write(f' Создана услуга: {service.name}')
 
         # 3. Создаём квартиры для демо-пользователя
         apartments_data = [
             {'address': 'г. Москва, ул. Пушкина, д. 10, кв. 25', 'area': 54.5, 'residents_count': 3},
-            {'address': 'г. Москва, ул. Ленина, д. 5, кв. 12', 'area': 38.0, 'residents_count': 2},
+            {'address': 'г. Москва, ул. Белинского, д. 52, кв. 12', 'area': 38.0, 'residents_count': 2},
             {'address': 'МО, г. Химки, ул. Победы, д. 8, кв. 101', 'area': 72.3, 'residents_count': 4},
         ]
 
@@ -70,10 +70,10 @@ class Command(BaseCommand):
             )
             apartments.append(apartment)
             if created:
-                self.stdout.write(f'✅ Создана квартира: {apartment.address[:30]}...')
+                self.stdout.write(f' Создана квартира: {apartment.address[:30]}...')
 
         # 4. Генерируем платежи за последние 12 месяцев
-        self.stdout.write('\n📊 Генерируем платежи...\n')
+        self.stdout.write('\n Генерируем платежи...\n')
         
         # Тарифы для каждой услуги
         tariffs = {
@@ -138,6 +138,6 @@ class Command(BaseCommand):
                         )
                         payments_created += 1
 
-        self.stdout.write(self.style.SUCCESS(f'\n🎉 Создано {payments_created} платежей!'))
-        self.stdout.write(self.style.SUCCESS('\n✅ Демо-данные успешно созданы!'))
-        self.stdout.write(self.style.WARNING('\n📝 Данные для входа: demo / demo123456'))
+        self.stdout.write(self.style.SUCCESS(f'\n Создано {payments_created} платежей!'))
+        self.stdout.write(self.style.SUCCESS('\n Демо-данные успешно созданы!'))
+        self.stdout.write(self.style.WARNING('\n Данные для входа: demo / demo123456'))

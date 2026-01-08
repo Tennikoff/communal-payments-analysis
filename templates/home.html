@@ -3,82 +3,107 @@
 {% block title %}Главная - КоммуналПро{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
 <section class="hero-section">
-    <div class="container text-center">
-        <h1 class="display-4 mb-4">Контролируйте свои коммунальные расходы</h1>
-        <p class="lead mb-4">Анализируйте платежи, выявляйте переплаты и прогнозируйте расходы</p>
-        {% if not user.is_authenticated %}
-        <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">Начать бесплатно</a>
-        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Войти</a>
-        {% else %}
-        <a href="{% url 'apartment_list' %}" class="btn btn-light btn-lg me-2">Мои квартиры</a>
-        <a href="{% url 'analytics' %}" class="btn btn-outline-light btn-lg">Аналитика</a>
-        {% endif %}
+    <div class="hero-content container text-center">
+        <h1 class="hero-title">Контролируйте свои коммунальные расходы</h1>
+        <p class="hero-subtitle">Анализируйте платежи, выявляйте переплаты и прогнозируйте расходы</p>
+        <div class="hero-buttons">
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-hero-primary me-2">
+                <i class="bi bi-person-plus-fill me-2"></i>Начать бесплатно
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-hero-secondary">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+            </a>
+            {% else %}
+            <a href="{% url 'apartment_list' %}" class="btn btn-hero-primary me-2">
+                <i class="bi bi-building me-2"></i>Мои квартиры
+            </a>
+            <a href="{% url 'analytics' %}" class="btn btn-hero-secondary">
+                <i class="bi bi-graph-up me-2"></i>Аналитика
+            </a>
+            {% endif %}
+        </div>
     </div>
 </section>
 
+<!-- Features Section -->
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-5">Возможности сервиса</h2>
+        <h2 class="text-center mb-5 fw-bold" style="color: var(--primary-color);">Возможности сервиса</h2>
         <div class="row">
             <div class="col-md-4 mb-4">
-                <div class="card card-feature h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <div class="display-4 mb-3">📊</div>
-                        <h5 class="card-title">Учёт платежей</h5>
-                        <p class="card-text">Ведите историю всех коммунальных платежей в одном месте. Добавляйте показания счётчиков и суммы.</p>
+                <div class="card card-feature h-100">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-clipboard-data-fill"></i>
                     </div>
+                    <h5>Учёт платежей</h5>
+                    <p class="text-muted">Ведите историю всех коммунальных платежей в одном месте. Добавляйте показания счётчиков и суммы.</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card card-feature h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <div class="display-4 mb-3">🔍</div>
-                        <h5 class="card-title">Выявление переплат</h5>
-                        <p class="card-text">Система автоматически сравнивает ваше потребление с нормативами и выделяет подозрительные начисления.</p>
+                <div class="card card-feature h-100">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-search"></i>
                     </div>
+                    <h5>Выявление переплат</h5>
+                    <p class="text-muted">Система автоматически сравнивает ваше потребление с нормативами и выделяет подозрительные начисления.</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card card-feature h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <div class="display-4 mb-3">📈</div>
-                        <h5 class="card-title">Прогноз расходов</h5>
-                        <p class="card-text">Получайте прогноз на следующий месяц на основе вашей истории потребления.</p>
+                <div class="card card-feature h-100">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-graph-up-arrow"></i>
                     </div>
+                    <h5>Прогноз расходов</h5>
+                    <p class="text-muted">Получайте прогноз на следующий месяц на основе вашей истории потребления.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+<!-- Statistics Section -->
 <section class="bg-light py-5">
     <div class="container">
-        <h2 class="text-center mb-5">Статистика сервиса</h2>
-        <div class="row text-center">
-            <div class="col-md-2 col-6 mb-3">
-                <h3 class="display-6 text-primary">{{ stats.users_count }}</h3>
-                <p class="text-muted small">Пользователей</p>
+        <h2 class="text-center mb-5 fw-bold" style="color: var(--primary-color);">Статистика сервиса</h2>
+        <div class="row g-3">
+            <div class="col-md-2 col-6 d-flex">
+                <div class="stat-card primary w-100">
+                    <div class="stat-value text-primary">{{ stats.users_count }}</div>
+                    <div class="stat-label">Пользователей</div>
+                </div>
             </div>
-            <div class="col-md-2 col-6 mb-3">
-                <h3 class="display-6 text-success">{{ stats.apartments_count }}</h3>
-                <p class="text-muted small">Квартир</p>
+            <div class="col-md-2 col-6 d-flex">
+                <div class="stat-card success w-100">
+                    <div class="stat-value text-success">{{ stats.apartments_count }}</div>
+                    <div class="stat-label">Квартир</div>
+                </div>
             </div>
-            <div class="col-md-2 col-6 mb-3">
-                <h3 class="display-6 text-info">{{ stats.payments_count }}</h3>
-                <p class="text-muted small">Платежей</p>
+            <div class="col-md-2 col-6 d-flex">
+                <div class="stat-card info w-100">
+                    <div class="stat-value text-info">{{ stats.payments_count }}</div>
+                    <div class="stat-label">Платежей</div>
+                </div>
             </div>
-            <div class="col-md-2 col-6 mb-3">
-                <h3 class="display-6 text-warning">{{ stats.total_sum }}₽</h3>
-                <p class="text-muted small">Учтено</p>
+            <div class="col-md-2 col-6 d-flex">
+                <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
+                    <div class="stat-value money-value">{{ stats.total_sum_display }}</div>
+                    <div class="stat-label">Учтено</div>
+                </div>
             </div>
-            <div class="col-md-2 col-6 mb-3">
-                <h3 class="display-6 text-danger">{{ stats.overpayments_count }}</h3>
-                <p class="text-muted small">Переплат</p>
+            <div class="col-md-2 col-6 d-flex">
+                <div class="stat-card danger w-100">
+                    <div class="stat-value text-danger">{{ stats.overpayments_count }}</div>
+                    <div class="stat-label">Переплат</div>
+                </div>
             </div>
-            <div class="col-md-2 col-6 mb-3">
-                <h3 class="display-6 text-secondary">{{ stats.avg_payment }}₽</h3>
-                <p class="text-muted small">Средний платёж</p>
+            <div class="col-md-2 col-6 d-flex">
+                <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
+                    <div class="stat-value money-value">{{ stats.avg_payment }} ₽</div>
+                    <div class="stat-label">Средний платёж</div>
+                </div>
             </div>
         </div>
     </div>

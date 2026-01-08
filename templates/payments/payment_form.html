@@ -6,9 +6,11 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <div class="card shadow">
+            <div class="card shadow animate-fade-in-up">
                 <div class="card-body p-4">
-                    <h2 class="text-center mb-4">💰 {{ title }}</h2>
+                    <h2 class="text-center mb-4">
+                        <i class="bi bi-credit-card me-2" style="color: var(--primary-color);"></i>{{ title }}
+                    </h2>
                     
                     <form method="post">
                         {% csrf_token %}
@@ -26,13 +28,18 @@
                         {% endfor %}
                         
                         <div class="alert alert-info small">
-                            <strong>💡 Подсказка:</strong> Сумма платежа рассчитается автоматически (Потребление × Тариф).
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Подсказка:</strong> Сумма платежа рассчитается автоматически (Потребление × Тариф).
                             Если потребление превышает норму более чем на 10%, платёж будет помечен как переплата.
                         </div>
                         
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Сохранить</button>
-                            <a href="{% url 'payment_list' %}" class="btn btn-secondary">Отмена</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Сохранить
+                            </button>
+                            <a href="{% url 'payment_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Отмена
+                            </a>
                         </div>
                     </form>
                 </div>
