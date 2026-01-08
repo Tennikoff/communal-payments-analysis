@@ -8,10 +8,11 @@
         <h1 class="display-4 mb-4">Контролируйте свои коммунальные расходы</h1>
         <p class="lead mb-4">Анализируйте платежи, выявляйте переплаты и прогнозируйте расходы</p>
         {% if not user.is_authenticated %}
-        <a href="#" class="btn btn-light btn-lg me-2">Начать бесплатно</a>
-        <a href="#" class="btn btn-outline-light btn-lg">Войти</a>
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">Начать бесплатно</a>
+        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Войти</a>
         {% else %}
-        <a href="#" class="btn btn-light btn-lg">Мои квартиры</a>
+        <a href="{% url 'apartment_list' %}" class="btn btn-light btn-lg me-2">Мои квартиры</a>
+        <a href="{% url 'analytics' %}" class="btn btn-outline-light btn-lg">Аналитика</a>
         {% endif %}
     </div>
 </section>
