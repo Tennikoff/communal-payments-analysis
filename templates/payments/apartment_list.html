@@ -11,20 +11,37 @@
 
     {% if apartments %}
     <div class="row">
-        {% for apartment in apartments %}
+        {% for item in apartments %}
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">{{ apartment.address }}</h5>
+                    <h5 class="card-title">{{ item.apartment.address }}</h5>
                     <ul class="list-unstyled text-muted">
-                        <li>📐 Площадь: {{ apartment.area }} м²</li>
-                        <li>👥 Проживающих: {{ apartment.residents_count }}</li>
-                        <li>📅 Добавлена: {{ apartment.created_at|date:"d.m.Y" }}</li>
+                        <li>📐 Площадь: {{ item.apartment.area }} м²</li>
+                        <li>👥 Проживающих: {{ item.apartment.residents_count }}</li>
+                        <li>📅 Добавлена: {{ item.apartment.created_at|date:"d.m.Y" }}</li>
                     </ul>
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <small class="text-muted">Платежей</small>
+                            <div class="fw-bold text-primary">{{ item.payments_count }}</div>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted">Потрачено</small>
+                            <div class="fw-bold text-success">{{ item.total_spent }}₽</div>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted">Переплат</small>
+                            <div class="fw-bold {% if item.overpayments_count > 0 %}text-danger{% else %}text-success{% endif %}">
+                                {{ item.overpayments_count }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer bg-white">
-                    <a href="{% url 'apartment_edit' apartment.pk %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
-                    <a href="{% url 'apartment_delete' apartment.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    <a href="{% url 'apartment_edit' item.apartment.pk %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
+                    <a href="{% url 'apartment_delete' item.apartment.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
                 </div>
             </div>
         </div>

@@ -56,17 +56,29 @@
     <div class="container">
         <h2 class="text-center mb-5">Статистика сервиса</h2>
         <div class="row text-center">
-            <div class="col-md-4 mb-3">
-                <h3 class="display-5 text-primary">{{ stats.users_count }}</h3>
-                <p class="text-muted">Пользователей</p>
+            <div class="col-md-2 col-6 mb-3">
+                <h3 class="display-6 text-primary">{{ stats.users_count }}</h3>
+                <p class="text-muted small">Пользователей</p>
             </div>
-            <div class="col-md-4 mb-3">
-                <h3 class="display-5 text-success">{{ stats.apartments_count }}</h3>
-                <p class="text-muted">Квартир на учёте</p>
+            <div class="col-md-2 col-6 mb-3">
+                <h3 class="display-6 text-success">{{ stats.apartments_count }}</h3>
+                <p class="text-muted small">Квартир</p>
             </div>
-            <div class="col-md-4 mb-3">
-                <h3 class="display-5 text-info">{{ stats.payments_count }}</h3>
-                <p class="text-muted">Записей о платежах</p>
+            <div class="col-md-2 col-6 mb-3">
+                <h3 class="display-6 text-info">{{ stats.payments_count }}</h3>
+                <p class="text-muted small">Платежей</p>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <h3 class="display-6 text-warning">{{ stats.total_sum }}₽</h3>
+                <p class="text-muted small">Учтено</p>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <h3 class="display-6 text-danger">{{ stats.overpayments_count }}</h3>
+                <p class="text-muted small">Переплат</p>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <h3 class="display-6 text-secondary">{{ stats.avg_payment }}₽</h3>
+                <p class="text-muted small">Средний платёж</p>
             </div>
         </div>
     </div>

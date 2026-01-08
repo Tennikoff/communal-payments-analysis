@@ -9,12 +9,26 @@ from .forms import RegisterForm, ApartmentForm, PaymentRecordForm
 from django.db.models import Sum, Count, Avg
 
 def home(request):
-    """Главная страница"""
+    """Главная страница с расширенной статистикой"""
+    from django.db.models import Sum, Avg
+    
     stats = {
         'users_count': User.objects.count(),
         'apartments_count': Apartment.objects.count(),
         'payments_count': PaymentRecord.objects.count(),
     }
+    
+    # Общая сумма всех платежей
+    total_sum = PaymentRecord.objects.aggregate(Sum('total_amount'))['total_amount__sum']
+    stats['total_sum'] = round(float(total_sum), 2) if total_sum else 0
+    
+    # Количество выявленных переплат
+    stats['overpayments_count'] = PaymentRecord.objects.filter(is_overpayment=True).count()
+    
+    # Средний платёж
+    avg_payment = PaymentRecord.objects.aggregate(Avg('total_amount'))['total_amount__avg']
+    stats['avg_payment'] = round(float(avg_payment), 2) if avg_payment else 0
+    
     return render(request, 'home.html', {'stats': stats})
 
 
@@ -34,9 +48,25 @@ def register(request):
 
 @login_required
 def apartment_list(request):
-    """Список квартир пользователя"""
+    """Список квартир пользователя со статистикой"""
     apartments = Apartment.objects.filter(user=request.user)
-    return render(request, 'payments/apartment_list.html', {'apartments': apartments})
+    
+    # Добавляем статистику для каждой квартиры
+    apartments_with_stats = []
+    for apartment in apartments:
+        payments = PaymentRecord.objects.filter(apartment=apartment)
+        total_spent = payments.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        payments_count = payments.count()
+        overpayments_count = payments.filter(is_overpayment=True).count()
+        
+        apartments_with_stats.append({
+            'apartment': apartment,
+            'total_spent': round(float(total_spent), 2),
+            'payments_count': payments_count,
+            'overpayments_count': overpayments_count,
+        })
+    
+    return render(request, 'payments/apartment_list.html', {'apartments': apartments_with_stats})
 
 
 @login_required
