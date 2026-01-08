@@ -51,3 +51,22 @@ class PaymentRecordForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Показываем только квартиры текущего пользователя
         self.fields['apartment'].queryset = Apartment.objects.filter(user=user)
+
+
+from .models import UserServiceNorm
+
+
+class UserServiceNormForm(forms.ModelForm):
+    class Meta:
+        model = UserServiceNorm
+        fields = ['norm_per_person']
+        widgets = {
+            'norm_per_person': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'step': '0.01',
+                'min': '0'
+            }),
+        }
+        labels = {
+            'norm_per_person': 'Норматив на человека',
+        }

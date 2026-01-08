@@ -117,3 +117,30 @@ class PaymentRecord(models.Model):
 
     def __str__(self):
         return f"{self.apartment.address} - {self.service_type.name}: {self.total_amount} руб."
+
+
+class UserServiceNorm(models.Model):
+    """Персональные нормативы пользователя"""
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    service_type = models.ForeignKey(
+        ServiceType,
+        on_delete=models.CASCADE,
+        verbose_name='Тип услуги'
+    )
+    norm_per_person = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Норматив на человека'
+    )
+
+    class Meta:
+        verbose_name = 'Пользовательский норматив'
+        verbose_name_plural = 'Пользовательские нормативы'
+        unique_together = ['user', 'service_type']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.service_type.name}: {self.norm_per_person}"

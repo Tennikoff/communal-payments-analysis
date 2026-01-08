@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ServiceType, Apartment, Tariff, PaymentRecord
+from .models import ServiceType, Apartment, Tariff, PaymentRecord, UserServiceNorm
 
 
 @admin.register(ServiceType)
@@ -28,3 +28,10 @@ class PaymentRecordAdmin(admin.ModelAdmin):
     search_fields = ('apartment__address',)
     list_filter = ('service_type', 'is_overpayment', 'date')
     date_hierarchy = 'date'
+
+
+@admin.register(UserServiceNorm)
+class UserServiceNormAdmin(admin.ModelAdmin):
+    list_display = ('user', 'service_type', 'norm_per_person')
+    search_fields = ('user__username', 'service_type__name')
+    list_filter = ('service_type',)

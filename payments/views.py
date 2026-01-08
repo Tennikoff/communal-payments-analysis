@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from decimal import Decimal
-from .models import Apartment, PaymentRecord, ServiceType
-from .forms import RegisterForm, ApartmentForm, PaymentRecordForm
+from .models import Apartment, PaymentRecord, ServiceType, UserServiceNorm
+from .forms import RegisterForm, ApartmentForm, PaymentRecordForm, UserServiceNormForm
 from django.db.models import Sum, Count, Avg
+from django.http import JsonResponse
 
 def home(request):
     """Главная страница с расширенной статистикой"""
@@ -251,32 +252,31 @@ import urllib, base64
 @login_required
 def analytics(request):
     """Страница аналитики с графиками"""
-    # Получаем квартиры пользователя
     user_apartments = Apartment.objects.filter(user=request.user)
     
     if not user_apartments.exists():
         messages.warning(request, 'Добавьте квартиру для просмотра аналитики!')
         return redirect('apartment_create')
     
-    # Получаем платежи
     payments = PaymentRecord.objects.filter(apartment__in=user_apartments).order_by('date')
     
     if not payments.exists():
         messages.warning(request, 'Добавьте платежи для просмотра аналитики!')
         return redirect('payment_create')
     
+    # Получаем пользовательские нормативы
+    user_norms = {
+        un.service_type_id: un.norm_per_person 
+        for un in UserServiceNorm.objects.filter(user=request.user)
+    }
+    
     # Преобразуем в DataFrame
     df = pd.DataFrame(list(payments.values(
         'date', 'service_type__name', 'consumption', 'total_amount', 'is_overpayment'
     )))
     
-    # Переименовываем колонки
     df.columns = ['date', 'service', 'consumption', 'amount', 'is_overpayment']
-    
-    # ВАЖНО: Преобразуем date в datetime
     df['date'] = pd.to_datetime(df['date'])
-    
-    # Преобразуем Decimal в float для расчётов
     df['amount'] = df['amount'].astype(float)
     df['consumption'] = df['consumption'].astype(float)
     
@@ -290,14 +290,13 @@ def analytics(request):
     monthly_data = df.groupby(df['date'].dt.to_period('M'))['amount'].sum()
     
     plt.figure(figsize=(10, 5))
-    ax = monthly_data.plot(kind='bar', color='#667eea')
-    plt.title('Расходы по месяцам', fontsize=14)
+    ax = monthly_data.plot(kind='bar', color='#1e3a5f')
+    plt.title('Расходы по месяцам', fontsize=14, fontweight='bold')
     plt.xlabel('Месяц')
     plt.ylabel('Сумма (руб)')
     plt.xticks(rotation=45)
     plt.tight_layout()
     
-    # Сохраняем в base64
     buffer1 = io.BytesIO()
     plt.savefig(buffer1, format='png', dpi=100)
     buffer1.seek(0)
@@ -309,10 +308,10 @@ def analytics(request):
     service_data = df.groupby('service')['amount'].sum().sort_values(ascending=False)
     
     plt.figure(figsize=(8, 8))
-    colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe']
+    colors = ['#1e3a5f', '#17a2b8', '#28a745', '#ffc107', '#dc3545']
     plt.pie(service_data.values, labels=service_data.index, autopct='%1.1f%%', 
             colors=colors[:len(service_data)], startangle=90)
-    plt.title('Структура расходов по услугам', fontsize=14)
+    plt.title('Структура расходов по услугам', fontsize=14, fontweight='bold')
     plt.tight_layout()
     
     buffer2 = io.BytesIO()
@@ -322,7 +321,7 @@ def analytics(request):
     buffer2.close()
     plt.close()
     
-    # === ПРОГНОЗ (скользящее среднее последних 3 месяцев) ===
+    # === ПРОГНОЗ ===
     recent_months = monthly_data.tail(3)
     forecast = recent_months.mean() if len(recent_months) > 0 else 0
     
@@ -334,13 +333,27 @@ def analytics(request):
         service_payments = payments.filter(service_type=service)
         if service_payments.exists():
             avg_consumption = service_payments.aggregate(Avg('consumption'))['consumption__avg']
-            norm = float(service.norm_per_person) * apartment.residents_count
+            
+            # Используем пользовательский норматив, если есть
+            if service.id in user_norms:
+                norm_value = float(user_norms[service.id])
+                is_custom = True
+            else:
+                norm_value = float(service.norm_per_person)
+                is_custom = False
+            
+            norm = norm_value * apartment.residents_count
             diff_percent = ((float(avg_consumption) - norm) / norm * 100) if norm > 0 else 0
             
             services_stats.append({
+                'id': service.id,
                 'name': service.name,
+                'unit': service.unit,
                 'avg': round(float(avg_consumption), 2),
                 'norm': round(norm, 2),
+                'norm_per_person': round(norm_value, 2),
+                'default_norm': float(service.norm_per_person),
+                'is_custom': is_custom,
                 'diff': round(diff_percent, 1)
             })
     
@@ -353,6 +366,7 @@ def analytics(request):
         'chart1': chart1,
         'chart2': chart2,
         'services_stats': services_stats,
+        'residents_count': apartment.residents_count,
     }
     
     return render(request, 'payments/analytics.html', context)
@@ -388,3 +402,59 @@ def payment_export_csv(request):
         ])
     
     return response
+
+
+@login_required
+def update_user_norm(request):
+    """Обновление пользовательского норматива через AJAX"""
+    if request.method == 'POST':
+        service_id = request.POST.get('service_id')
+        norm_value = request.POST.get('norm_value')
+        
+        try:
+            service = ServiceType.objects.get(id=service_id)
+            norm_value = Decimal(norm_value)
+            
+            # Создаём или обновляем норматив
+            user_norm, created = UserServiceNorm.objects.update_or_create(
+                user=request.user,
+                service_type=service,
+                defaults={'norm_per_person': norm_value}
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'message': f'Норматив для "{service.name}" обновлён'
+            })
+        except (ServiceType.DoesNotExist, ValueError) as e:
+            return JsonResponse({
+                'success': False,
+                'message': 'Ошибка при обновлении норматива'
+            })
+    
+    return JsonResponse({'success': False, 'message': 'Неверный метод запроса'})
+
+
+@login_required
+def reset_user_norm(request):
+    """Сброс пользовательского норматива к стандартному"""
+    if request.method == 'POST':
+        service_id = request.POST.get('service_id')
+        
+        try:
+            UserServiceNorm.objects.filter(
+                user=request.user,
+                service_type_id=service_id
+            ).delete()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Норматив сброшен к стандартному'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': 'Ошибка при сбросе норматива'
+            })
+    
+    return JsonResponse({'success': False, 'message': 'Неверный метод запроса'})

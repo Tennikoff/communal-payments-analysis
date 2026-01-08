@@ -68,41 +68,45 @@
 <section class="bg-light py-5">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold" style="color: var(--primary-color);">Статистика сервиса</h2>
-        <div class="row g-3">
-            <div class="col-md-2 col-6 d-flex">
-                <div class="stat-card primary w-100">
-                    <div class="stat-value text-primary">{{ stats.users_count }}</div>
-                    <div class="stat-label">Пользователей</div>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 d-flex">
-                <div class="stat-card success w-100">
-                    <div class="stat-value text-success">{{ stats.apartments_count }}</div>
-                    <div class="stat-label">Квартир</div>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 d-flex">
-                <div class="stat-card info w-100">
-                    <div class="stat-value text-info">{{ stats.payments_count }}</div>
-                    <div class="stat-label">Платежей</div>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 d-flex">
-                <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
-                    <div class="stat-value money-value">{{ stats.total_sum_display }}</div>
-                    <div class="stat-label">Учтено</div>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 d-flex">
-                <div class="stat-card danger w-100">
-                    <div class="stat-value text-danger">{{ stats.overpayments_count }}</div>
-                    <div class="stat-label">Переплат</div>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 d-flex">
-                <div class="stat-card w-100" style="border-left-color: var(--accent-color);">
-                    <div class="stat-value money-value">{{ stats.avg_payment }} ₽</div>
-                    <div class="stat-label">Средний платёж</div>
+        <div class="card shadow-sm">
+            <div class="card-body py-4">
+                <div class="row g-3">
+                    <div class="col-md-2 col-6 d-flex">
+                        <div class="stat-item w-100">
+                            <div class="stat-value text-primary">{{ stats.users_count }}</div>
+                            <div class="stat-label">Пользователей</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 d-flex">
+                        <div class="stat-item w-100">
+                            <div class="stat-value text-success">{{ stats.apartments_count }}</div>
+                            <div class="stat-label">Квартир</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 d-flex">
+                        <div class="stat-item w-100">
+                            <div class="stat-value text-info">{{ stats.payments_count }}</div>
+                            <div class="stat-label">Платежей</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 d-flex">
+                        <div class="stat-item w-100">
+                            <div class="stat-value money-value">{{ stats.total_sum_display }}</div>
+                            <div class="stat-label">Учтено</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 d-flex">
+                        <div class="stat-item w-100">
+                            <div class="stat-value text-danger">{{ stats.overpayments_count }}</div>
+                            <div class="stat-label">Переплат</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 d-flex">
+                        <div class="stat-item w-100">
+                            <div class="stat-value money-value">{{ stats.avg_payment }} ₽</div>
+                            <div class="stat-label">Средний платёж</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -25,4 +25,8 @@ urlpatterns = [
 
     # Аналитика
     path('analytics/', views.analytics, name='analytics'),
+
+    # Нормативы
+    path('norms/update/', views.update_user_norm, name='update_user_norm'),
+    path('norms/reset/', views.reset_user_norm, name='reset_user_norm'),
 ]
