@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!defr+jdh-*b!=c-h23vi=mfz3a$9#(eor9fws5d!*en#)ekb6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
+
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -126,4 +128,4 @@ LOGIN_URL = 'login'
 import os
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'Tennikoff.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'tennikoff.pythonanywhere.com', 'Tennikoff.pythonanywhere.com']

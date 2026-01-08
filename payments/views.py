@@ -6,7 +6,7 @@ from django.contrib import messages
 from decimal import Decimal
 from .models import Apartment, PaymentRecord, ServiceType
 from .forms import RegisterForm, ApartmentForm, PaymentRecordForm
-
+from django.db.models import Sum, Count, Avg
 
 def home(request):
     """Главная страница"""
@@ -83,13 +83,46 @@ def apartment_delete(request, pk):
 
 @login_required
 def payment_list(request):
-    """Список платежей пользователя"""
-    # Получаем все квартиры пользователя
+    """Список платежей пользователя с фильтрацией и статистикой"""
     user_apartments = Apartment.objects.filter(user=request.user)
-    # Получаем платежи по этим квартирам
-    payments = PaymentRecord.objects.filter(apartment__in=user_apartments).order_by('-date')
+    payments = PaymentRecord.objects.filter(apartment__in=user_apartments)
     
-    return render(request, 'payments/payment_list.html', {'payments': payments})
+    # Фильтрация по типу услуги
+    service_filter = request.GET.get('service')
+    if service_filter:
+        payments = payments.filter(service_type_id=service_filter)
+    
+    # Фильтрация по переплате
+    overpayment_filter = request.GET.get('overpayment')
+    if overpayment_filter == 'yes':
+        payments = payments.filter(is_overpayment=True)
+    elif overpayment_filter == 'no':
+        payments = payments.filter(is_overpayment=False)
+    
+    # Сортировка
+    sort = request.GET.get('sort', '-date')
+    payments = payments.order_by(sort)
+    
+    # Получаем типы услуг для фильтра
+    services = ServiceType.objects.all()
+    
+    # Статистика с агрегацией
+    total_amount = payments.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+    overpayments_count = payments.filter(is_overpayment=True).count()
+    avg_payment = payments.aggregate(Avg('total_amount'))['total_amount__avg'] or 0
+    
+    context = {
+        'payments': payments,
+        'services': services,
+        'total_amount': round(float(total_amount), 2),
+        'avg_payment': round(float(avg_payment), 2),
+        'overpayments_count': overpayments_count,
+        'current_service': service_filter,
+        'current_overpayment': overpayment_filter,
+        'current_sort': sort,
+    }
+    
+    return render(request, 'payments/payment_list.html', context)
 
 
 @login_required
@@ -285,3 +318,35 @@ def analytics(request):
     }
     
     return render(request, 'payments/analytics.html', context)
+
+
+import csv
+from django.http import HttpResponse
+
+
+@login_required
+def payment_export_csv(request):
+    """Экспорт платежей в CSV"""
+    user_apartments = Apartment.objects.filter(user=request.user)
+    payments = PaymentRecord.objects.filter(apartment__in=user_apartments).order_by('-date')
+    
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="payments.csv"'
+    response.write('\ufeff')  # BOM для корректного отображения в Excel
+    
+    writer = csv.writer(response)
+    writer.writerow(['Дата', 'Квартира', 'Услуга', 'Потребление', 'Единица', 'Тариф', 'Сумма', 'Переплата'])
+    
+    for payment in payments:
+        writer.writerow([
+            payment.date.strftime('%d.%m.%Y'),
+            payment.apartment.address,
+            payment.service_type.name,
+            float(payment.consumption),
+            payment.service_type.unit,
+            float(payment.tariff),
+            float(payment.total_amount),
+            'Да' if payment.is_overpayment else 'Нет'
+        ])
+    
+    return response

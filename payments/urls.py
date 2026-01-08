@@ -20,6 +20,9 @@ urlpatterns = [
     path('payments/<int:pk>/edit/', views.payment_edit, name='payment_edit'),
     path('payments/<int:pk>/delete/', views.payment_delete, name='payment_delete'),
 
+    # Экспорт
+path('payments/export/csv/', views.payment_export_csv, name='payment_export_csv'),
+
     # Аналитика
     path('analytics/', views.analytics, name='analytics'),
 ]
