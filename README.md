@@ -20,9 +20,9 @@
 ## 🛠 Технологии
 
 - **Backend:** Python 3.14, Django 6.0
-- **Database:** SQLite (dev) / PostgreSQL (prod)
-- **Data Analysis:** Pandas, Matplotlib
-- **Frontend:** Bootstrap 5
+- **Database:** SQLite (dev)
+- **Data Analysis:** Pandas, Matplotlib, NumPy
+- **Frontend:** Bootstrap 5, HTML5, CSS3, JavaScript
 - **Deploy:** PythonAnywhere
 
 ---
@@ -62,10 +62,22 @@
     ```bash
     python manage.py migrate
     ```
-5. **Создайте суперпользователя**
+5. **Выберите один из вариантов запуска:**
+    Вариант А: Быстрый старт с демо-данными (рекомендуется для проверки) 
+    Описание: Создаёт демо-аккаунт с 3 квартирами и ~150 платежами за 12 месяцев для наглядной демонстрации всех возможностей сервиса: 
+    ```bash
+    python manage.py generate_demo_data
+    ```
+    Данные для входа: 
+    Логин: demo/Пароль: demo123456
+
+    Вариант Б: Чистый старт (для работы с нуля)
+    Создаёт только администратора, данные добавляете сами:
     ```bash
     python manage.py createsuperuser
     ```
+    Введите логин, email (опционально) и пароль.
+    
 6. **Запустите сервер**
     ```bash
     python manage.py runserver
