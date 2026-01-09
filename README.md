@@ -113,8 +113,3 @@ communal-payments-analysis/
 Имя: [Егор]
 GitHub: Tennikoff
 ```
-
-## 📄 Лицензия
-```text
-MIT License
-```
