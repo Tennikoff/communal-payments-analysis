@@ -42,55 +42,79 @@
 
 ## 🚀 Как запустить проект локально
 
-```bash
-1. Клонируйте репозиторий
-git clone https://github.com/Tennikoff/communal-payments-analysis.git
-cd communal-payments-analysis
 
-2. Создайте виртуальное окружение
-python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Linux/Mac
-    
-3. Установите зависимости
-pip install -r requirements.txt
-    
-4. Выполните миграции
-python manage.py migrate
-    
-5. Создайте суперпользователя
-python manage.py createsuperuser
-    
-6. Запустите сервер
-python manage.py runserver
-    
-7. Откройте в браузере
-http://127.0.0.1:8000/
-```
-
+1. **Клонируйте репозиторий**
+    ```bash
+    git clone https://github.com/Tennikoff/communal-payments-analysis.git
+    cd communal-payments-analysis
+    ```
+2. **Создайте виртуальное окружение**
+    ```bash
+    python -m venv venv
+    venv\Scripts\activate  # Windows
+    source venv/bin/activate  # Linux/Mac
+    ```
+3. **Установите зависимости**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4. **Выполните миграции**
+    ```bash
+    python manage.py migrate
+    ```
+5. **Создайте суперпользователя**
+    ```bash
+    python manage.py createsuperuser
+    ```
+6. **Запустите сервер**
+    ```bash
+    python manage.py runserver
+    ```
+7. **Откройте в браузере**
+    ```bash
+    http://127.0.0.1:8000/
+    ```
 ---
 
-### 📁 Структура проекта
+## 📁 Структура проекта
 
 ```text
 communal-payments-analysis/
-├── config/              # Настройки Django
-├── payments/            # Основное приложение
-│   ├── models.py        # Модели: Apartment, ServiceType, PaymentRecord, Tariff
-│   ├── views.py         # Логика: CRUD, аналитика
-│   ├── forms.py         # Формы Django
-│   └── admin.py         # Настройки админки
-├── templates/           # HTML шаблоны
-├── requirements.txt     # Зависимости
-├── TZ.md               # Техническое задание
-└── README.md           # Документация
+├── config/                     # Настройки Django
+│   ├── settings.py             # Конфигурация проекта
+│   ├── urls.py                 # Главные URL маршруты
+│   └── wsgi.py                 # WSGI для деплоя
+├── payments/                   # Основное приложение
+│   ├── management/
+│   │   └── commands/
+│   │       └── generate_demo_data.py  # Команда генерации тестовых данных
+│   ├── migrations/             # Миграции БД
+│   ├── models.py               # Модели данных
+│   ├── views.py                # Логика представлений
+│   ├── forms.py                # Формы Django
+│   ├── admin.py                # Настройки админ-панели
+│   └── urls.py                 # URL маршруты приложения
+├── templates/                  # HTML шаблоны
+│   ├── base.html               # Базовый шаблон
+│   ├── home.html               # Главная страница
+│   ├── payments/               # Шаблоны платежей
+│   └── registration/           # Шаблоны авторизации
+├── screenshots/                # Скриншоты для README
+├── requirements.txt            # Зависимости Python
+├── TZ.md                       # Техническое задание
+└── README.md                   # Документация
 ```
 
 ---
 
-👤 Автор
+
+## 👤 Автор
+```text
 Имя: [Егор]
 GitHub: Tennikoff
+```
 
-📄 Лицензия
+## 📄 Лицензия
+```text
 MIT License
+```
