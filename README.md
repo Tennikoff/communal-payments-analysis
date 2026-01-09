@@ -4,6 +4,8 @@
 
 **Демо-версия:** [https://Tennikoff.pythonanywhere.com](https://Tennikoff.pythonanywhere.com)
 
+**📝 Тестовый аккаунт:** логин `demo` / пароль `demo123456`
+
 ---
 
 ## 🎯 Возможности
